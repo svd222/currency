@@ -18,30 +18,30 @@ codeception.yml<br>
 Соотвественно action - load<br>
 
 По поводу алгоритма работы:<br>
-<b>Просторы для оптимизации<b><br>
+<b>Просторы для оптимизации</b><br>
 1) желательно изменить немного логику <br>
 Код в методе _uploadBatch (Который вызывается из actionLoad)<br>
 <code>
-if(count($update) != count($cRates)) {
-    foreach($cRates as $k=>$v) {
-        $found = false;
-        foreach($update as $kk=>$vv) {
-            if($v->symbol == $vv->symbol) {
-                $found = true;
+if(count(<var>$update</var>) != count(<var>$cRates</var>)) {
+    foreach(<var>$cRates</var> as <var>$k</var>=><var>$v</var>) {
+        <var>$found</var> = false;
+        foreach(<var>$update</var> as <var>$kk</var>=><var>$vv</var>) {
+            if(<var>$v->symbol</var> == <var>$vv->symbol</var>) {
+                <var>$found</var> = true;
                 break;
             }
         }
-        if(!$found) {
-            $insert[] = $v;
+        if(!<var>$found</var>) {
+            <var>$insert<var/>[] = <var>$v</var>;
         }
     }
-    $insertSql = "INSERT INTO ".$tablePrefix."currency(`symbol`,`rate`) VALUES ";
-    foreach($insert as $k=>$v) {
-        $insertSql .= "('".$v->symbol."',".$v->rate."),";
+    <var>$insertSql</var> = "INSERT INTO ".<var>$tablePrefix</var>."currency(`symbol`,`rate`) VALUES ";
+    foreach(<var>$insert</var> as <var>$k</var>=>$v</var>) {
+        <var>$insertSql</var> .= "('".<var>$v->symbol</var>."',".<var>$v->rate</var>."),";
     }
-    $insertSql = substr($insertSql,0,strlen($insertSql) - 1).";\n";
+    <var>$insertSql</var> = substr(<var>$insertSql</var>,0,strlen(<var>$insertSql</var>) - 1).";\n";
 }
-<code>
+</code>
 дает сложность = n в 2 степени<br>
 а еще лучше <br>
 2) вынести код _uploadBatch в микросервис, написанный на python, golang...<br>
