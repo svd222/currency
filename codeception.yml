@@ -1,0 +1,25 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+settings:
+    bootstrap: _bootstrap.php
+    colors: false
+    memory_limit: 1024M
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+modules:
+    config:
+        Db:
+            dsn: 'mysql:host=localhost;dbname=currency_test'
+            user: 'root'
+            password: 'YOUR_DB_PSSWORD_HERE'
+            dump: tests/_data/dump.sql
+        Yii2:
+            configFile :
+                config/console.php
+                #tests/unit/_config.php
