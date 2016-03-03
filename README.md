@@ -1,26 +1,27 @@
 Yii 2 Basic Project Template
 ============================
 
-Настройка:
-(Если codeception не установлен то установить)
-1) в корне проекта выполнить: composer update
-2) Сконфигурировать подключение к БД (user,pass,dbname) в 3 файлах
-config/console.php (компонент db)
-config/db.php
-codeception.yml
+Настройка:<br>
+(Если codeception не установлен то установить)<br>
+1) в корне проекта выполнить: composer update<br>
+2) Сконфигурировать подключение к БД (user,pass,dbname) в 3 файлах<br>
+config/console.php (компонент db)<br>
+config/db.php<br>
+codeception.yml<br>
 
-Головной скрипт
-    http://currency/currency-rate/load
-Тестирование 
-    php path/to/codeception/codecept run unit
+Головной скрипт<br>
+    http://currency/currency-rate/load<br>
+Тестирование <br>
+    php path/to/codeception/codecept run unit<br>
 
-Головной контроллер CurrencyRateController
-Соотвественно action - load
+Головной контроллер CurrencyRateController<br>
+Соотвественно action - load<br>
 
-По поводу алгоритма работы:
-Просторы для оптимизации
-1) желательно изменить немного логику 
-Код в методе _uploadBatch (Который вызывается из actionLoad)
+По поводу алгоритма работы:<br>
+<b>Просторы для оптимизации<b><br>
+1) желательно изменить немного логику <br>
+Код в методе _uploadBatch (Который вызывается из actionLoad)<br>
+<code>
 if(count($update) != count($cRates)) {
     foreach($cRates as $k=>$v) {
         $found = false;
@@ -40,16 +41,17 @@ if(count($update) != count($cRates)) {
     }
     $insertSql = substr($insertSql,0,strlen($insertSql) - 1).";\n";
 }
-дает сложность = n в 2 степени
-а еще лучше 
-2) вынести код _uploadBatch в микросервис, написанный на python, golang...
-3) Немного корявая получилась модель CurrencyRatesForm 
-Аттрибут $source заменить на 2: 
-    $sourceUrl
-    $sourceLocal
+<code>
+дает сложность = n в 2 степени<br>
+а еще лучше <br>
+2) вынести код _uploadBatch в микросервис, написанный на python, golang...<br>
+3) Немного корявая получилась модель CurrencyRatesForm <br>
+Аттрибут $source заменить на 2: <br>
+    $sourceUrl<br>
+    $sourceLocal<br>
     Оба в rules задать как необязательные и в зависимости от того на какой чекбокс кликнули (грузить из локального файла данные или по урл)
-проверять аттрибуты кастомными валидаторами
+проверять аттрибуты кастомными валидаторами<br>
     function sourceUrlValidate($attr, $params) (встроенный валидатор UrlValidator выдает ошибку при проверке адреса типа http://localhost) Хотя работает
-верно, но для теста неудобно).
+верно, но для теста неудобно).<br>
     function sourceLocalValidate($attr, $params) (Или использовать built in yii\validators\FileValidator)
-Так было бы элегантнее
+Так было бы элегантнее<br>
