@@ -1,7 +1,6 @@
 <?php
 namespace app\tests\unit;
 use Yii;
-use app\components\CustomFormatter;
 
 class CustomFormatterTest extends \Codeception\TestCase\Test
 {
@@ -33,20 +32,32 @@ class CustomFormatterTest extends \Codeception\TestCase\Test
         ];
         $formatter = Yii::$app->formatter;
                 
-        $test1Data = $formatter->asJsonCurrencyRates($json1,CustomFormatter::FORMAT_JSON_MAP);
+        $test1Data = $formatter->asCurrencyRates($json1);
+        $this->assertTrue(is_array($test1Data));
+        $this->assertTrue(is_object($test1Data[0]));
         $i = 0;
         foreach($test1Data as $d) {
-            $this->assertTrue(is_object($d));
             $this->assertEquals($data1[$i][0], $d->symbol);
             $this->assertEquals($data1[$i][1], $d->rate);
             $i++;
         }
         
-        $test2Data = $formatter->asJsonCurrencyRates($json2,CustomFormatter::FORMAT_JSON_SEQUENCE);
+        $test1Data = $formatter->asArray()->asCurrencyRates($json1);
         
         $i = 0;
+        foreach($test1Data as $d) {
+            $this->assertTrue(is_array($d));
+            $this->assertEquals($data1[$i][0], $d['symbol']);
+            $this->assertEquals($data1[$i][1], $d['rate']);
+            $i++;
+        }
+        
+        $test2Data = $formatter->asCurrencyRates($json2);
+        
+        $this->assertTrue(is_array($test2Data));
+        $this->assertTrue(is_object($test2Data[0]));
+        $i = 0;
         foreach($test2Data as $d) {
-            $this->assertTrue(is_object($d));
             $this->assertEquals($data2[$i][0], $d->symbol);
             $this->assertEquals($data2[$i][1], $d->rate);
             $i++;

@@ -11,6 +11,42 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'afNGZzze_0CE5tKHa4InTeEK0XhpsJOh',
         ],
+        'dataSourceSelector' => [
+            'class' => 'app\common\BaseSelector',
+            'selectorFunc' => //custom this function for choose needed value and sets the below 'data' item for your own purposes
+                function($data, $route) {
+                    $validator = new \app\validators\CustomUrlValidator;
+                    $selected = ($validator->validate($route)?1:2);
+                    return \Yii::createObject(['class'=>$data[$selected]['class'],'route'=>$route]);
+                },
+            'data' => [
+                1 => [
+                    'class' => 'app\data\RemoteDataSource'
+                ],
+                2 => [
+                    'class' => 'app\data\LocalDataSource'
+                ]
+            ]
+        ],
+        'uploaderSelector' => [
+            'class' => 'app\common\BaseSelector',
+            'selectorFunc' => 
+                function($data, $var) {
+                    $validator = new \app\validators\CustomUrlValidator;
+                    if($var === null) {
+                        $selected = 1;
+                    }
+                    return \Yii::createObject($data[$selected]);
+                },
+            'data' => [
+                1 => [
+                    'class'=>'app\data\batch\mysql\Uploader',
+                    'keyField' => 'symbol',
+                    'dataTable' => 'currency',
+                    'fields' => ['symbol','rate'],
+                ],
+            ]
+        ],                
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
